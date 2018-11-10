@@ -34,14 +34,17 @@ plt.plot(X_test,Y_predict2,'g-')
 plt.axis([0,2,0,10])
 # plt.show()
 
-# for two vars
+# for two vars error!!!
 print('for two vars')
-X_2=numpy.c_[numpy.ones((100,1)),X]
-Y_2=3+4*X_2[:,0]+5*X_2[:,1]+numpy.random.randn(100,1)
+X_2=numpy.random.rand(10,2)
+Y_2=3+4*X_2[:,0]+5*X_2[:,1]+numpy.random.randn(10,1)
+print(X_2[:,0])
 
-ridge_model=Ridge()
+ridge_model=Ridge(solver='sag',max_iter=1000)
 ridge_model.fit(X_2,Y_2)
-# print(ridge_model.intercept_)
-# print(ridge_model.coef_)
-X_test=numpy.c_[numpy.ones((3,1)),X_test]
+print(ridge_model.intercept_)
+print(ridge_model.coef_)
+X_test=numpy.array([[2]])
+X_test=numpy.c_[numpy.ones((1,1)),X_test]
+# print()
 print(ridge_model.predict(X_test))
