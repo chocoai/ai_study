@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 X=numpy.random.rand(100,1)
 Y=3+4*X+numpy.random.randn(100,1)
 
+
+
 plt.plot(X,Y,'b.')
 
 
@@ -30,4 +32,16 @@ print(SGDRegressor_model.predict(X_test))
 
 plt.plot(X_test,Y_predict2,'g-')
 plt.axis([0,2,0,10])
-plt.show()
+# plt.show()
+
+# for two vars
+print('for two vars')
+X_2=numpy.c_[numpy.ones((100,1)),X]
+Y_2=3+4*X_2[:,0]+5*X_2[:,1]+numpy.random.randn(100,1)
+
+ridge_model=Ridge()
+ridge_model.fit(X_2,Y_2)
+# print(ridge_model.intercept_)
+# print(ridge_model.coef_)
+X_test=numpy.c_[numpy.ones((3,1)),X_test]
+print(ridge_model.predict(X_test))
