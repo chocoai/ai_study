@@ -30,3 +30,5 @@ plt.plot(X_new,Y_proba[:,2],'b.')
 X_new=np.array([[1,1,1,1]])
 Y_proba=LGmodel.predict_proba(X_new)
 print(Y_proba)
+sum=Y_proba[0,0]+Y_proba[0,1]+Y_proba[0,2]
+print(sum)
