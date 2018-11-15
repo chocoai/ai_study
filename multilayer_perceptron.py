@@ -3,11 +3,24 @@ import numpy as np
 from sklearn.neural_network import MLPClassifier
 # //作业是MLPRegressor预测水泥强度
 # ps 画出神经网络拓扑图
+# 下面是MLPRegressor与MLPClassifier的区别
+# Class MLPRegressor implements a multi-layer perceptron (MLP)
+# that trains using backpropagation with no activation function in the output layer,
+#  which can also be seen as using the identity function as activation function.
 from sklearn.neural_network import MLPRegressor
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 scaler = StandardScaler()
+'''
+sklearn.com
+ The key step is computing the partial derivatives above.
+ backpropagation gives an efficient way to compute these partial derivatives.
+ 这个求偏导的算法并没看懂。。。
+ 有时间的话可以再研究研究
+
+
+'''
 '''
 Multi-layer Perceptron is sensitive to feature scaling, 
 so it is highly recommended to scale your data. 
@@ -54,7 +67,7 @@ X = data[:, :13]
 scaler.fit(X)
 X = scaler.transform(X)
 Y = data[:, 13]  # 注意，这里的13后面一定不能加冒号！！！否则Y会变成2D矩阵，交给模型算的时候就完全不一样了！！！
-model = MLPRegressor(hidden_layer_sizes=(10, 10,10), activation='relu', solver='sgd', max_iter=1000)
+model = MLPRegressor(hidden_layer_sizes=(200, 200,200,200,200), activation='relu', solver='sgd', max_iter=1000)
 model.fit(X, Y)
 print('coef.shape',[coef.shape for coef in model.coefs_])
 print([coef for coef in model.coefs_])
@@ -71,7 +84,6 @@ print(Y_test)
 print('Y_predict', Y_predict)
 # print(np.corrcoef(Y_test,Y_predict))
 # print(Y.shape)
-# 问题大大的啊！！！！！
 '''
 做的時候發現有時候出來的結果是完全一樣的，即因素變了，結果卻沒有變化；但有時候結果又是正確的
 1.sklearn也說了，這個模型MLP的損失函數不是凸函數，即有多個本地最小值，需要多次嘗試。
