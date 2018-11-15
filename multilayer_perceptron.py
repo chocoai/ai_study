@@ -58,7 +58,7 @@ model = MLPRegressor(hidden_layer_sizes=(2, 2), activation='relu', solver='sgd',
 model.fit(X, Y)
 print('coef.shape',[coef.shape for coef in model.coefs_])
 print([coef for coef in model.coefs_])
-x = X[:, 6:7]
+x = X[:, 3:4]
 y_hat = model.predict(X)
 X_test = data_test[:, :13]
 X_test = scaler.transform(X_test)
