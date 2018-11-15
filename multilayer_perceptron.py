@@ -50,17 +50,17 @@ data = pd.read_csv('HousePrice.csv')
 data = np.array(data)
 data_test = data[271:, :]
 data = data[:270, :]  # 270 for train
-X = data[:, :7]
+X = data[:, :13]
 scaler.fit(X)
 X = scaler.transform(X)
 Y = data[:, 13]  # 注意，这里的13后面一定不能加冒号！！！否则Y会变成2D矩阵，交给模型算的时候就完全不一样了！！！
 model = MLPRegressor(hidden_layer_sizes=(2, 2), activation='relu', solver='sgd', max_iter=1000)
 model.fit(X, Y)
-# print('coef.shape',[coef.shape for coef in model.coefs_])
-# print([coef for coef in model.coefs_])
+print('coef.shape',[coef.shape for coef in model.coefs_])
+print([coef for coef in model.coefs_])
 x = X[:, 6:7]
 y_hat = model.predict(X)
-X_test = data_test[:, :7]
+X_test = data_test[:, :13]
 X_test = scaler.transform(X_test)
 Y_test = data_test[:, 13]
 
@@ -71,7 +71,12 @@ print('Y_predict', Y_predict)
 # print(np.corrcoef(Y_test,Y_predict))
 # print(Y.shape)
 # 问题大大的啊！！！！！
-# 为什么计算出来差距这么大呢？！
+'''
+做的時候發現有時候出來的結果是完全一樣的，即因素變了，結果卻沒有變化；但有時候結果又是正確的
+1.sklearn也說了，這個模型MLP的損失函數不是凸函數，即有多個本地最小值，需要多次嘗試。
+但，如果有多個本地最小值，就是導致計算結果完全一樣的原因嗎？表示有點懷疑。
+2.同時，該模型對因素取值範圍敏感，最好是進行歸一化等預處理，這可能也是導致出現該異常的一個原因
+'''
 plt.plot(x, Y, 'b.')
 plt.plot(x, y_hat, 'r.')
 plt.show()
