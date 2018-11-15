@@ -54,14 +54,15 @@ X = data[:, :13]
 scaler.fit(X)
 X = scaler.transform(X)
 Y = data[:, 13]  # 注意，这里的13后面一定不能加冒号！！！否则Y会变成2D矩阵，交给模型算的时候就完全不一样了！！！
-model = MLPRegressor(hidden_layer_sizes=(2, 2), activation='relu', solver='sgd', max_iter=1000)
+model = MLPRegressor(hidden_layer_sizes=(10, 10,10), activation='relu', solver='sgd', max_iter=1000)
 model.fit(X, Y)
 print('coef.shape',[coef.shape for coef in model.coefs_])
 print([coef for coef in model.coefs_])
-x = X[:, 3:4]
+
 y_hat = model.predict(X)
 X_test = data_test[:, :13]
 X_test = scaler.transform(X_test)
+x = X_test[:, 6:7]
 Y_test = data_test[:, 13]
 
 Y_predict = model.predict(X_test)
@@ -77,8 +78,8 @@ print('Y_predict', Y_predict)
 但，如果有多個本地最小值，就是導致計算結果完全一樣的原因嗎？表示有點懷疑。
 2.同時，該模型對因素取值範圍敏感，最好是進行歸一化等預處理，這可能也是導致出現該異常的一個原因
 '''
-plt.plot(x, Y, 'b.')
-plt.plot(x, y_hat, 'r.')
+plt.plot(x, Y_test, 'b.')
+plt.plot(x, Y_predict, 'r.')
 plt.show()
 
 '''
