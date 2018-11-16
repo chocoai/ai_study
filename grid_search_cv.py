@@ -10,3 +10,21 @@
     可能取不到真正的误差最小的超参数组合。
     当然了，这其实也是一种防止过拟合的情况，因为单个测试集也算是模型训练过程的一部分，应该防止过拟合。
 '''
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+
+iris=load_iris()
+X=iris['data']
+Y=iris['target']
+
+grid_search={'max_iter':[100,1000,1000],
+             'C':[1.0,0.9,0.8],
+             'tol':[1e-3,1e-4,1e-2]
+             }
+clf=LogisticRegression(solver='sag')
+grid_search_clf=GridSearchCV(clf,param_grid=grid_search,cv=5)
+grid_search_clf.fit(X,Y)
+print(grid_search_clf.best_estimator_)
+x=X[100:101,:]
+print(grid_search_clf.predict(x))
