@@ -23,11 +23,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 iris=load_iris()
-X=iris['data'][:,:2]#选取相关性较低的特征，以试验模型的错误率效果更好
+X=iris['data']#[:,:2]#选取相关性较低的特征，以试验模型的错误率效果更好
 y=iris['target']
 X_train, X_test, y_train, y_test = train_test_split(  X, y, test_size=0.33, random_state=42)
 
-max_depth=5
+max_depth=4
 tree_clf_gini=tree.DecisionTreeClassifier(random_state=23,criterion="gini",max_depth=max_depth)
 tree_clf_entropy=tree.DecisionTreeClassifier(random_state=23,criterion="entropy",max_depth=max_depth)
 tree_clf_gini.fit(X_train,y_train)
