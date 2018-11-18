@@ -19,6 +19,8 @@ from sklearn.ensemble import RandomTreesEmbedding
 from sklearn import tree
 from  sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+import numpy as np
 
 iris=load_iris()
 X=iris['data'][:,:2]#选取相关性较低的特征，以试验模型的错误率效果更好
@@ -35,3 +37,15 @@ y_predict_entropy=tree_clf_entropy.predict(X_test)
 acc_gini=accuracy_score(y_predict_gini,y_test)
 acc_ent=accuracy_score(y_predict_entropy,y_test)
 print(acc_gini,acc_ent)
+
+depth=np.arange(1,20)
+acc_list=[]
+for i in depth:
+    tree_clf_gini = tree.DecisionTreeClassifier(random_state=23, criterion="gini", max_depth=i)
+    tree_clf_gini.fit(X_train, y_train)
+    y_predict_gini = tree_clf_gini.predict(X_test)
+    acc_gini = accuracy_score(y_predict_gini, y_test)
+    acc_list.append(acc_gini)
+
+plt.plot(depth,acc_list,'ro-')
+plt.show()

@@ -4,7 +4,7 @@
 2.建模思想
     决策树、随机森林
     决策树的思想其实就是根据非常多的条件（与离散化处理有关）逐级进行判断并决策
-    随机森林的处理，包括记录数量和维度选取
+    随机森林的处理，包括记录数量和维度选取,是一种bagging的思想
 3.求解方式
     纯度：基尼系数、熵、方差
     用纯度来选择分裂维度（可以反过来反映各维度对结果的相关性）
@@ -15,7 +15,15 @@
     准确率
 '''
 from sklearn.datasets import load_iris
-from sklearn.ensemble import RandomTreesEmbedding
+from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import bagging
 from sklearn import tree
 from  sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
+iris=load_iris()
+X=iris['data'][:,:2]#选取相关性较低的特征，以试验模型的错误率效果更好
+y=iris['target']
+X_train, X_test, y_train, y_test = train_test_split(  X, y, test_size=0.33, random_state=42)
+
+rfc=RandomForestClassifier(n_estimators=5)
