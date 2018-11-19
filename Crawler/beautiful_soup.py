@@ -45,7 +45,7 @@ def parse_url(url,filename):
 if __name__=='__main__':
     i = 0
     while(True):
-        filename='house_price.csv'
+        filename='house_price1543.csv'
         i+=1
         url = 'http://bj.01fy.cn/sale/list_0_0_0_0-0_0_0-0_0_0_0-0_0_0-0_2_0_' + str(i) + '_.html'
         parse_url(url,filename=filename)
