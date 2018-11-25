@@ -14,6 +14,11 @@
     针对上述的各种指标，可以进行前剪枝、后剪枝，防止过拟合
 4.模型评估
     准确率
+
+剩下的部分：
+1.随机森林回归（可以不做）
+2.bagging的拓展，sklearn官网，选取时除了课程中的三种方式外，还需要加一个神经网络
+
 '''
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
