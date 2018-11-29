@@ -7,9 +7,8 @@ n_epochs = 1000
 learning_rate = 0.001
 housing_data = fetch_california_housing(data_home='D:\\学习笔记\\ai\\dataSets', download_if_missing=True)
 data = housing_data.data
-print(housing_data.feature_names)
+
 m, n = data.shape
-# 这一步numpy是直接执行的，不能放到tf里面去执行吗？
 housing_data_puls_bias = np.c_[np.ones((m, 1)), data]
 
 X = tf.constant(housing_data_puls_bias, name='X', dtype=tf.float32)
@@ -35,3 +34,6 @@ with tf.Session() as sess:
             print('mse.eval():',mse.eval())
             train_op.run()
     print('theta:', theta.eval())
+'''
+还是有错！！！！
+'''
