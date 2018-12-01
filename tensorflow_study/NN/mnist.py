@@ -17,15 +17,19 @@ n_hidden1=300
 n_hidden2=100
 n_output=10
 
+
+
+
 X=tf.placeholder(tf.float32,shape=(None,n_features),name='features')
 y=tf.placeholder(tf.int64,shape=(None),name='y')
 
 def neuron_layer(input,n_neurons,name,activation=None):
     with tf.name_scope(name):
-        n_input=input.shape()[1]
-        stddev = 2 / tf.square(n_input)
-        w = tf.truncated_normal((n_input, n_neurons), stddev=stddev)  # y=x.w+w0
-        w0 = tf.Variable(tf.zeros([n_hidden1]))
+        n_input=int(input.get_shape()[1])
+        stddev = tf.cast(2 / tf.square(n_input),tf.float32)
+        initw = tf.truncated_normal((n_input, n_neurons), stddev=stddev)  # y_=x.w+w0
+        w=tf.Variable(initw)
+        w0 = tf.Variable(tf.zeros([n_neurons]))
         z=tf.matmul(input,w)+w0
         if activation=='relu':
             return tf.nn.relu(z)
@@ -38,21 +42,33 @@ with tf.name_scope('dnn'):
     logits=neuron_layer(hidden2,n_output,'softmax')
 
 with tf.name_scope('loss'):
-    xentopy=tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y,logits=logits)
-    loss=tf.reduce_mean(xentopy,name='loss')
+    xentropy=tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y,logits=logits)
+    loss=tf.reduce_mean(xentropy,name='loss')
 
 with tf.name_scope('optimizer'):
     optimizer=tf.train.GradientDescentOptimizer(learning_rate=0.01)
-    train=optimizer.minimize(loss)
+    train=optimizer.minimize(loss)#这里会对tf图中的varible节点(这里指的是w和w0）进行梯度下降
 
 with tf.name_scope('eval'):
-    correct=tf.nn.in_top_k(logits,y,1,name='correct')
-    acc=tf.reduce_mean(correct)
+    correct=tf.nn.in_top_k(logits,y,1)
+    acc=tf.reduce_mean(tf.cast(correct,tf.float32))
 
 init=tf.global_variables_initializer()
 saver=tf.train.Saver()
 
+mnist=input_data.read_data_sets('MNIST_DATA_BAK/')
+batch_size=50
+mini_batch_epoch=int(mnist.train.num_examples/batch_size)
+n_epochs=40
 
 with tf.Session() as sess:
     init.run()
-    train.run(feed_dict={})
+    for epoch in range(n_epochs):
+        for i in range(mini_batch_epoch):
+            X_batch,y_batch=mnist.train.next_batch(batch_size=batch_size)
+            train.run(feed_dict={X:X_batch,y:y_batch})
+            if(i%50==0):
+                acc_train=acc.eval(feed_dict={X:X_batch,y:y_batch})
+                print(i,acc_train)#问题，为什么正确率这么低？！
+        acc_test=acc.eval(feed_dict={X:mnist.test.images,y:mnist.test.labels})
+        print(acc_test)
