@@ -18,26 +18,25 @@ n_hidden1=300
 n_hidden2=100
 n_output=10
 
-
 X=tf.placeholder(tf.float32,shape=(None,n_features),name='features')
 y=tf.placeholder(tf.int64,shape=(None),name='y')
+
 def neuron_layer(input,n_neurons,name,activation=None):
     with tf.name_scope(name):
         n_input=int(input.get_shape()[1])
         stddev = tf.cast(2 / tf.square(n_input),tf.float32)
-        initw = tf.truncated_normal((n_input, n_neurons), stddev=stddev)  # y_=x.w+w0
+        initw = tf.random_normal((n_input, n_neurons), stddev=stddev)  # y_=x.w+b
         w=tf.Variable(initw,name='weight')
-        w0 = tf.Variable(tf.zeros([n_neurons]),name='biases')
-        z=tf.matmul(input,w)+w0
-        if activation=='relu':
+        b = tf.Variable(tf.zeros([n_neurons]),name='biases')
+        z=tf.matmul(input,w)+b
+        if (activation=='relu'):
             return tf.nn.relu(z)
         else:
             return z
 
-
 with tf.name_scope('dnn'):
-    hidden1=neuron_layer(X,n_hidden1,'hidden1','relu')
-    hidden2=neuron_layer(hidden1,n_hidden2,'hidden2','relu')
+    hidden1=neuron_layer(X,n_hidden1,'hidden1',activation='relu')
+    hidden2=neuron_layer(hidden1,n_hidden2,'hidden2',activation='relu')
     logits=neuron_layer(hidden2,n_output,'softmax')
 '''
 with tf.name_scope('dnn'):
