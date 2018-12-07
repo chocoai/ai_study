@@ -18,8 +18,9 @@ n_hidden1=300
 n_hidden2=100
 n_output=10
 
-X=tf.placeholder(tf.float32,shape=(None,n_features),name='features')
-y=tf.placeholder(tf.int64,shape=(None),name='y')
+with tf.name_scope('para'):
+    X=tf.placeholder(tf.float32,shape=(None,n_features),name='features')
+    y=tf.placeholder(tf.int64,shape=(None),name='y')
 
 def neuron_layer(input,n_neurons,name,activation=None):
     with tf.name_scope(name):
@@ -27,7 +28,9 @@ def neuron_layer(input,n_neurons,name,activation=None):
         stddev = tf.cast(2 / tf.square(n_input),tf.float32)
         initw = tf.random_normal((n_input, n_neurons), stddev=stddev)  # y_=x.w+b
         w=tf.Variable(initw,name='weight')
+        # tf.summary.histogram('weight',w)
         b = tf.Variable(tf.zeros([n_neurons]),name='biases')
+        # tf.summary.histogram('b',b)
         z=tf.matmul(input,w)+b
         if (activation=='relu'):
             return tf.nn.relu(z)
@@ -57,15 +60,15 @@ with tf.name_scope('eval'):
     correct=tf.nn.in_top_k(logits,y,1)
     acc=tf.reduce_mean(tf.cast(correct,tf.float32))
 
-init=tf.global_variables_initializer()
 saver=tf.train.Saver()
 
 mnist=input_data.read_data_sets('MNIST_DATA_BAK/')
 batch_size=50
 mini_batch_epoch=int(mnist.train.num_examples/batch_size)
-n_epochs=40
-
+n_epochs=5
 with tf.Session() as sess:
+    writer = tf.summary.FileWriter('logs/', sess.graph)
+    init = tf.global_variables_initializer()
     init.run()
     for epoch in range(n_epochs):
         for i in range(mini_batch_epoch):
@@ -76,5 +79,6 @@ with tf.Session() as sess:
                 print(i,acc_train)
                 #问题，为什么正确率这么低？！
                 #事实证明，自己构造的图是错误的。
+                #1208  考虑两个问题：1.为什么board有时候显示不出来？2.研究画出的graph，找出问题究竟出在哪里
         acc_test=acc.eval(feed_dict={X:mnist.test.images,y:mnist.test.labels})
         print(acc_test)
