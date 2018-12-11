@@ -71,6 +71,7 @@ with tf.name_scope('eval'):
     correct=tf.nn.in_top_k(logits,y,1)
     acc=tf.reduce_mean(tf.cast(correct,tf.float32))
 
+
 saver=tf.train.Saver()
 
 mnist=input_data.read_data_sets('MNIST_DATA_BAK/')
