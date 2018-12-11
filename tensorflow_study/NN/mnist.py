@@ -71,7 +71,6 @@ with tf.name_scope('eval'):
     correct=tf.nn.in_top_k(logits,y,1)
     acc=tf.reduce_mean(tf.cast(correct,tf.float32))
 
-
 saver=tf.train.Saver()
 
 mnist=input_data.read_data_sets('MNIST_DATA_BAK/')
@@ -80,6 +79,7 @@ mini_batch_epoch=int(mnist.train.num_examples/batch_size)
 n_epochs=10
 with tf.Session() as sess:
     merged=tf.summary.merge_all()#将各类型的结果保存merge到一起，在一个网页中查看
+    # sess.run(merged)
     writer = tf.summary.FileWriter('logs/', sess.graph)
 
     init = tf.global_variables_initializer()
@@ -100,3 +100,4 @@ with tf.Session() as sess:
 
         acc_test=acc.eval(feed_dict={X:mnist.test.images,y:mnist.test.labels})
         # print(acc_test)
+    saver.save(sess,'.')
