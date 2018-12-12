@@ -88,10 +88,10 @@ with tf.Session() as sess:
         for i in range(mini_batch_epoch):
             X_batch,y_batch=mnist.train.next_batch(batch_size=batch_size)
             train.run(feed_dict={X:X_batch,y:y_batch})
-            if(i%50==0):
-                acc_train=acc.eval(feed_dict={X:X_batch,y:y_batch})
+            # if(i%50==0):
+                # acc_train=acc.eval(feed_dict={X:X_batch,y:y_batch})
                 # print('w:',w1.eval())
-                print(i,acc_train)
+                # print(i,acc_train)
                 #问题，为什么正确率这么低？！
                 #事实证明，自己构造的图是错误的。
                 #1208  考虑两个问题：1.为什么board有时候显示不出来？2.研究画出的graph，找出问题究竟出在哪里
@@ -99,5 +99,5 @@ with tf.Session() as sess:
                 #而问题却出现在stddev上！！！说明，在最开始做的时候，不要盲目的加一些优化的算法，否则可能会导致出现问题。
 
         acc_test=acc.eval(feed_dict={X:mnist.test.images,y:mnist.test.labels})
-        # print(acc_test)
-    saver.save(sess,'.')
+        print('test:',acc_test)
+    # saver.save(sess,'./')
