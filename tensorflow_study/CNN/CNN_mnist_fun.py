@@ -1,4 +1,12 @@
+'''
+droop out 深度学习最流行的正则化手段
+正则其实是提升模型泛华能力的手段
+drop out相当于随机去除掉输入节点、隐藏节点，这样肯定会降低过拟合的问题
+但是在真正使用模型进行预测的时候，还是所有的输入节点、隐藏节点都会参与计算
+但是在实际使用时，dropout却会导致计算异常！是什么原因呢？
+有可能是因为节点总量较少
 
+'''
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import numpy as np
@@ -10,6 +18,9 @@ out_shape=np.array(mnist.train.labels).shape[1]
 with tf.name_scope('input'):
     X=tf.placeholder(shape=(None,28,28,1),dtype=tf.float32)
     y=tf.placeholder(shape=(None,out_shape),dtype=tf.float32)
+
+# with tf.name_scope('dropout'):
+#     X=tf.nn.dropout(X,keep_prob=0.5)
 
 def weight(shape):
     return tf.Variable(tf.truncated_normal(shape=shape,stddev=0.1))
@@ -34,7 +45,11 @@ with tf.name_scope('fc1'):
     w_fc1=weight(shape=(7*7*48,100))
     b_fc1=bias(shape=(100))
     fc1=tf.matmul(pool2_reshape,w_fc1)+b_fc1
+
+with tf.name_scope('fc1_dropout'):
+    fc1=tf.nn.dropout(fc1,keep_prob=1.0)
     relu_fc1=tf.nn.relu(fc1)
+
 with tf.name_scope('softmax'):
     w_softmax=weight(shape=(100,10))
     b_sotfmax=bias(shape=(10))
@@ -45,8 +60,7 @@ with tf.name_scope('loss'):
 
 with tf.name_scope('train'):
     # optimizer=tf.train.GradientDescentOptimizer()
-
-    optimizer=tf.train.AdamOptimizer()
+    optimizer=tf.train.AdamOptimizer(learning_rate=0.001)
     train=optimizer.minimize(loss=loss)
 
 with tf.name_scope('acc'):
@@ -58,11 +72,11 @@ with tf.Session() as sess:
     writer=tf.summary.FileWriter('log/',sess.graph)
     init=tf.global_variables_initializer()
     init.run()
-    for i in range(1000):
+    for i in range(5000):
         X_batch,y_batch=mnist.train.next_batch(50)
         X_batch=np.array(X_batch).reshape(-1,28,28,1)
         train.run(feed_dict={X:X_batch,y:y_batch})
-        if i%100==0 and i<1000:
+        if i%100==0:
             print('train acc:',i,acc.eval(feed_dict={X:X_batch,y:y_batch}))
     X_batch= mnist.test.images
     X_batch = np.array(X_batch).reshape(-1, 28, 28, 1)
