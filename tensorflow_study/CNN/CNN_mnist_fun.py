@@ -5,6 +5,9 @@ drop out相当于随机去除掉输入节点、隐藏节点，这样肯定会降
 但是在真正使用模型进行预测的时候，还是所有的输入节点、隐藏节点都会参与计算
 但是在实际使用时，dropout却会导致计算异常！是什么原因呢？
 有可能是因为节点总量较少
+结果异常，还有种可能，就是存在多个局部最小值，甚至可能出现，一个局部最小值旁边突然陡峭的上升至另外一个局部最小值
+这种时候，好像没有什么太好的办法，只能调参反复进行计算，具体后面可以再研究
+
 
 '''
 import tensorflow as tf
@@ -53,7 +56,7 @@ with tf.name_scope('fc1_dropout'):
 with tf.name_scope('softmax'):
     w_softmax=weight(shape=(100,10))
     b_sotfmax=bias(shape=(10))
-    #注意，这一步不能少，即不能缺失tf.nn.softmax()这个函数，
+    #注意，这一步不能少，即不能缺失tf.nn.softmax()这个函数，因为在后面的评估中要用
     softmax=tf.nn.softmax(tf.matmul(relu_fc1,w_softmax)+b_sotfmax)
 with tf.name_scope('loss'):
     loss=tf.reduce_mean(tf.reduce_sum(-y*tf.log(softmax),reduction_indices=[1]))
