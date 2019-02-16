@@ -73,8 +73,9 @@ NLP学习：
 TensorFlow：
 	https://www.tensorflow.org/tutorials/audio_recognition
 	
-
-
+在TensorFlow的练习中，optimizer文件，对房价进行线性回归时，mse不降反升
+而用adam方法进行计算时，模型正常，有可能是因为记录数量太大了，导致在计算的过程中数据溢出
+用SGD或mini batch GD可能会正常
 
 
 
