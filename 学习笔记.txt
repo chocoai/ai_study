@@ -24,7 +24,14 @@ tf：
 7.代码模块化
     将重复代码抽象成函数进行调用即可
 8.tensorboard
-
+    tf.summary.scalar  标量，记录的是每一步时的值，注意此标量不能是矩阵或向量
+    tf.summary.histogram 柱状图，可以记录每一步时的矩阵或向量取值
+    tf.summary.merge_all 将各个视图进行合并，统一进行记录及展示,
+                            注意，这里的merge_all会返回一个对象，
+                            需要在tf.session中run这个merge后的对象，
+                            得到的结果，用下面的FileWriter写入到目录中
+                            fw.add_summary(summary=summary_str,global_step=n)
+    tf.summary.FileWriter('logs/',sess.graph)  将图表输出到目录
 
 
 
