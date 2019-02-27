@@ -99,5 +99,6 @@ RNN
     今天终于通过别人的代码，看到了rnn应该是个什么样子了。。。
     需要好好研究下tensorflow.contrib.rnn.static_rnn以及 tf.nn.rnn_cell.BasicLSTMCell等中的代码，看看具体是怎么实现的
     rnn及lstm的模型可以复习下Andrew的内容
+    通过tensorboard能看到别人代码的graph，现在的问题是，怎么才能构建自己的模型？或者说，怎么才能构建decoder？
 
 	

@@ -6,7 +6,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 from tensorflow.contrib import rnn
 
 # 加载数据
-mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
+mnist = input_data.read_data_sets("MNIST_DATA_BAK/", one_hot=True)
 trainimgs, trainlabels, testimgs, testlabels = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
 ntrain, ntest, dim, nclasses = trainimgs.shape[0], testimgs.shape[0], trainimgs.shape[1], trainlabels.shape[1]
 # print(ntrain, ntest, dim, nclasses)
@@ -56,6 +56,7 @@ sess = tf.Session()
 sess.run(init)
 print("Start optimization")
 for epoch in range(training_epochs):
+    fw=tf.summary.FileWriter(logdir='logs',graph=sess.graph)
     avg_cost = 0.
     total_batch = int(mnist.train.num_examples / batch_size)
     # total_batch = 100   
